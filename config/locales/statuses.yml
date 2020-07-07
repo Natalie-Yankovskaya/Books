@@ -1,0 +1,4 @@
+not_found: "404 Not Found"
+bad_request: "400 Bad Request"
+success: "200 OK"
+created: "201 Created"

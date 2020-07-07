@@ -1,0 +1,1 @@
+STATUS = YAML.load_file(Rails.root.join('config/locales/statuses.yml'))
