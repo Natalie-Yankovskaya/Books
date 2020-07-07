@@ -34,7 +34,15 @@ class Api::V1::BooksController < ApplicationController
 				book.authors.destroy(author)
 			end
 
-			render json: {status: STATUS['success'], message: "Loaded book", data: book, number_of_authors: book.authors.count }
+			render json: 
+			{
+				status: STATUS['success'], 
+				message: "Loaded book", 
+				data: book, 
+				number_of_authors: book.authors.count, 
+				authors: book.authors.where("authors_books.book_id" => book[:id])
+			}
+
 		end
 
 	end

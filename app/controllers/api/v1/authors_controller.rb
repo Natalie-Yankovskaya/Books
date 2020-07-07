@@ -12,9 +12,11 @@ class Api::V1::AuthorsController < ApplicationController
 	def show
 
 		author = Author.find(params[:id]) 
+
 		if author.nil?
 			render json: {status: STATUS['not_found'], message: "The author is not found", data: author.errors }
 		else
+
 			if params[:idx_add]
 				book = Book.find(params[:idx_add])
 				author.books << book
@@ -25,9 +27,16 @@ class Api::V1::AuthorsController < ApplicationController
 				author.books.destroy(book)
 			end
 			
-			render json: {status: STATUS['success'], message: "Loaded author", data: author, number_of_books: author.books.count }
+			render json: 
+			{
+				status: STATUS['success'], 
+				message: "Loaded author", 
+				data: author, 
+				number_of_books: author.books.count, 
+				books: author.books.where("authors_books.author_id" => author[:id]) 
+			}
 		end
-		
+
 	end
 
 
