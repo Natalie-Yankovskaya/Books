@@ -5,6 +5,7 @@ require File.expand_path('../telegram/general_methods', __dir__)
 module AuthorsMethods
 
 	def authors_methods(bot, author_id, message)
+		GeneralMethods.logger_info('Authors Methods')
     	author_methods = [
       		[Telegram::Bot::Types::InlineKeyboardButton.new(text: 'Delete author', callback_data: "delete_author,#{author_id}")],
      		[Telegram::Bot::Types::InlineKeyboardButton.new(text: "Add book to author", callback_data: "add_book_to_author,#{author_id}"),
@@ -20,30 +21,35 @@ module AuthorsMethods
 
 
   	def new_author(bot, message, item)
+  		GeneralMethods.logger_info('Creating new author')
     	if item == 'book'
-      	book_id = GeneralMethods.find_id(message, 1)
-     	book = Book.find_by_id(book_id)
+      		book_id = GeneralMethods.find_id(message, 1)
+     		book = Book.find_by_id(book_id)
+     		GeneralMethods.logger_info("For book #{book_id}")
     	end
     	bot.api.send_message(chat_id: message.from.id, text: "Send author's name")
     	bot.listen do |message|
       		author_name = message.text
-      		puts author_name
+      		GeneralMethods.logger_info(author_name)
       		bot.api.send_message(chat_id: message.from.id, text: "Send author's surname")
       		bot.listen do |message|
         		author_surname = message.text
-        		puts author_surname
+        		GeneralMethods.logger_info(author_surname)
        			author = Author.new(name: author_name, surname: author_surname)
         		if author.save
+        			GeneralMethods.logger_info('The author is created')
           			bot.api.send_message(chat_id: message.chat.id, parse_mode: 'Markdown',
           			text: "*Status: #{STATUS['created']}*\n\nCreated author:\nId: #{author['id']}\nName: #{author['name']}\nSurname: #{author['surname']}", date: message.date)
           			if item =='book'
            				book.authors << author
+           				GeneralMethods.logger_info('And added to the book')
             			bot.api.send_message(chat_id: message.from.id, text: "#{STATUS['success']} \nAuthor is added to the book")
             			BooksMethods.books_methods(bot, book_id, message)
           			else
             			authors_methods(bot, book_id, message)
           			end
         		else
+        			GeneralMethods.logger_info('The author is not created')
           			bot.api.send_message(chat_id: message.chat.id, parse_mode: 'Markdown', text: "*Status: #{STATUS['bad_request']}*", date: message.date)
         		end
         		break
@@ -55,13 +61,14 @@ module AuthorsMethods
 
 
     def show_authors(bot, message)
-    all_authors = Array.new(Author.all)
-    ikb_all_authors = []
-    for author in all_authors do
-      ikb_all_authors << Telegram::Bot::Types::InlineKeyboardButton.new(text: "Id: #{author['id']}, Name: #{author['name']}, Surname: #{author['surname']}", callback_data: "find_author,#{author['id']}'")
-    end 
-    markup_ikb_all_authors = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: ikb_all_authors)
-    bot.api.send_message(chat_id: message.from.id, text: "Status: #{STATUS['success']} \nLoaded authors:", reply_markup: markup_ikb_all_authors) 
+    	GeneralMethods.logger_info('Showing all authors')
+    	all_authors = Array.new(Author.all)
+    	ikb_all_authors = []
+    	for author in all_authors do
+      		ikb_all_authors << Telegram::Bot::Types::InlineKeyboardButton.new(text: "Id: #{author['id']}, Name: #{author['name']}, Surname: #{author['surname']}", callback_data: "find_author,#{author['id']}'")
+   		end 
+    	markup_ikb_all_authors = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: ikb_all_authors)
+    	bot.api.send_message(chat_id: message.from.id, text: "Status: #{STATUS['success']} \nLoaded authors:", reply_markup: markup_ikb_all_authors) 
  	end
     module_function :show_authors
 
