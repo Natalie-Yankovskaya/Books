@@ -11,7 +11,7 @@ class Api::V1::AuthorsController < ApplicationController
 	#show author by index (пишем в строке: например .../12)
 	def show
 
-		author = Author.find(params[:id]) 
+		author = Author.find_by_id(params[:id]) 
 
 		if author.nil?
 			render json: {status: STATUS['not_found'], message: "The author is not found", data: author.errors }
@@ -56,7 +56,7 @@ class Api::V1::AuthorsController < ApplicationController
 
 	#delete author (пишем в строке: например .../12)
 	def destroy
-		author = Author.find(params[:id])
+		author = Author.find_by_id(params[:id])
 		if author.nil? 
 			render json: {status: STATUS['not_found'], message: "The author is not found", data: author.errors}
 		else

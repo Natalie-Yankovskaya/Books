@@ -19,7 +19,7 @@ class Api::V1::BooksController < ApplicationController
 
 	#show book by index (пишем в строке: например .../12)
 	def show
-		book = Book.find(params[:id]) 
+		book = Book.find_by_id(params[:id]) 
 
 		if book.nil?
 			render json: {status: STATUS['not_found'], message: "The book is not found", data: book.errors}
@@ -63,7 +63,7 @@ class Api::V1::BooksController < ApplicationController
 
 	#delete book (пишем в строке: например .../12)
 	def destroy
-		book = Book.find(params[:id])
+		book = Book.find_by_id(params[:id])
 		if book.nil? 
 			render json: {status: STATUS['not_found'], message: "The book is not found", data: book.errors}
 		else
@@ -75,7 +75,7 @@ class Api::V1::BooksController < ApplicationController
 
 	#Mark as read
 	def update
-		book = Book.find(params[:id])
+		book = Book.find_by_id(params[:id])
 		if book
 			book.update(:status => 'true')
 			render json: {status: STATUS['success'], message: "The book is marked as read", data: book}
