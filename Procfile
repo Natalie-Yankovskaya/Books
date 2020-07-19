@@ -1,1 +1,1 @@
-web: telegram/ruby books_bot.rb
+web: ruby telegram/books_bot.rb
