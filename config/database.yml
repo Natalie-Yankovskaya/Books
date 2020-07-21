@@ -20,9 +20,9 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling 
   pool: 5
-  username: lwkmhgskkoqtwg
-  password: 81b3b7f6899d41d081ece5280de0f0f4d919baa93712c02690eb546f3d9e7803
-  host: ec2-54-246-115-40.eu-west-1.compute.amazonaws.com
+  username: postgres
+  password: hi1236
+  host: localhost
   port: 5432
 
 development:
@@ -80,8 +80,8 @@ development:
 #
 # You can use this database configuration with:
 #
-#   production:
-#     url: <%= ENV['DATABASE_URL'] %>
+   production:
+     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
   <<: *default
