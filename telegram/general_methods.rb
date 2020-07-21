@@ -140,35 +140,42 @@ module GeneralMethods
 
 
   def show_books_authors(bot, message, item)
+    
     id = find_id(message, 1)
-    book_author = item.find_by_id(id) 
-    if item == Book
-      logger_info("Showing authors of the book #id}")
-      text_result = "Book's authors:"
-      book_authors = book_author.authors.where("authors_books.book_id" => book_author[:id])
-      result = []
-      for author in book_authors do
-        result << Telegram::Bot::Types::InlineKeyboardButton.new(text: "Id: #{author['id']}, Name: #{author['name']}, Surname: #{author['surname']}", callback_data: "find_author,#{author['id']}")
+    book_author = item.find_by_id(id)
+    if book_author.nil?
+      logger_info("The book or author is not found")
+      bot.api.send_message(chat_id: message.from.id, text: STATUS['not_found'])
+    else
+      
+      if item == Book
+        logger_info("Showing authors of the book #{id}")
+        text_result = "Book's authors:"
+        book_authors = book_author.authors.where("authors_books.book_id" => book_author[:id])
+        result = []
+        for author in book_authors do
+          result << Telegram::Bot::Types::InlineKeyboardButton.new(text: "Id: #{author['id']}, Name: #{author['name']}, Surname: #{author['surname']}", callback_data: "find_author,#{author['id']}")
+        end
+
+      else
+        logger_info("Showing books of the author #{id}")
+        text_result = "Author's books:"
+        author_books = book_author.books.where("authors_books.author_id" => book_author[:id]) 
+        result = []
+        for book in author_books do
+          result << Telegram::Bot::Types::InlineKeyboardButton.new(text: "Id: #{book['id']}, Title: #{book['title']}, Status: #{book['status']}", callback_data: "find_book,#{book['id']}")
+        end 
+
       end
 
-    else
-      logger_info("Showing books of the author #{id}")
-      text_result = "Author's books:"
-      author_books = book_author.books.where("authors_books.author_id" => book_author[:id]) 
-      result = []
-      for book in author_books do
-        result << Telegram::Bot::Types::InlineKeyboardButton.new(text: "Id: #{book['id']}, Title: #{book['title']}, Status: #{book['status']}", callback_data: "find_book,#{book['id']}")
-      end 
+      markup_ikb_result = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: result)
+      bot.api.send_message(chat_id: message.from.id, text: "Status: #{STATUS['success']} \n#{text_result}", reply_markup: markup_ikb_result)
 
-    end
-
-    markup_ikb_result = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: result)
-    bot.api.send_message(chat_id: message.from.id, text: "Status: #{STATUS['success']} \n#{text_result}", reply_markup: markup_ikb_result)
-
-    if item == Book
-      BooksMethods.books_methods(bot, id, message)
-    else
-      AuthorsMethods.authors_methods(bot, id, message)
+      if item == Book
+        BooksMethods.books_methods(bot, id, message)
+      else
+        AuthorsMethods.authors_methods(bot, id, message)
+      end
     end
   end
   module_function :show_books_authors
