@@ -18,11 +18,11 @@ default: &default
   adapter: postgresql
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
-  # http://guides.rubyonrails.org/configuring.html#database-pooling
+  # http://guides.rubyonrails.org/configuring.html#database-pooling 
   pool: 5
-  username: postgres
-  password: hi1236
-  host: localhost
+  username: lwkmhgskkoqtwg
+  password: 81b3b7f6899d41d081ece5280de0f0f4d919baa93712c02690eb546f3d9e7803
+  host: ec2-54-246-115-40.eu-west-1.compute.amazonaws.com
   port: 5432
 
 development:
@@ -76,7 +76,7 @@ development:
 # On Heroku and other platform providers, you may have a full connection URL
 # available as an environment variable. For example:
 #
-   DATABASE_URL="postgres://lwkmhgskkoqtwg:81b3b7f6899d41d081ece5280de0f0f4d919baa93712c02690eb546f3d9e7803@ec2-54-246-115-40.eu-west-1.compute.amazonaws.com:5432/ddbp1ab088olrj"
+  DATABASE_URL="postgres://lwkmhgskkoqtwg:81b3b7f6899d41d081ece5280de0f0f4d919baa93712c02690eb546f3d9e7803@ec2-54-246-115-40.eu-west-1.compute.amazonaws.com:5432/ddbp1ab088olrj"
 #
 # You can use this database configuration with:
 #
