@@ -28,7 +28,7 @@ module BooksMethods
 
   def mark_book_as_read(bot, message)
     book_id = GeneralMethods.find_id(message, 1)
-    logger_info("Marking the book #{book_id} as read")
+    GeneralMethods.logger_info("Marking the book #{book_id} as read")
     book = Book.find_by_id(book_id)
     if book.nil?
       bot.api.send_message(chat_id: message.from.id, text: STATUS['not_found'])
@@ -49,7 +49,7 @@ module BooksMethods
     if item == 'author'
       author_id = GeneralMethods.find_id(message, 1)
       author = Author.find_by_id(author_id)
-      GeneralMethods.logger_info("For author #{book_id}")
+      GeneralMethods.logger_info("For author #{author_id}")
     end
 
     bot.api.send_message(chat_id: message.from.id, text: "Send book's title")
