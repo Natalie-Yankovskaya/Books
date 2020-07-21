@@ -74,8 +74,11 @@ GEM
     minitest (5.14.0)
     multipart-post (2.1.1)
     nio4r (2.5.2)
+    nokogiri (1.10.9)
+      mini_portile2 (~> 2.4.0)
     nokogiri (1.10.9-x86-mingw32)
       mini_portile2 (~> 2.4.0)
+    pg (1.2.3)
     pg (1.2.3-x86-mingw32)
     puma (3.12.4)
     rack (2.2.2)
@@ -133,9 +136,10 @@ GEM
       equalizer (~> 0.0, >= 0.0.9)
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.4)
+    websocket-extensions (0.1.5)
 
 PLATFORMS
+  ruby
   x86-mingw32
 
 DEPENDENCIES
